@@ -261,7 +261,10 @@ type Vue struct {
 	Log func(keypath ...interface{}) `js:"$log"`
 }
 
-// New register a new Vue from a struct instance `structPtr`
+// New creates a VueJS Instance to apply bidings between `structPtr` and
+// `selectorOrElementOrFunction` target, it also connects the generated VueJS
+// instance with the `structPtr`, you can use `vue.Get` from you code to
+// access the generated VueJS Instance (can be used as `this` for JavaScirpt side).
 //
 //  all `exported field` of the `struct` would become VueJS Instance's data
 //  which can be used in the html to do data binding: v-bind, etc
@@ -271,9 +274,9 @@ type Vue struct {
 //
 //  You can get this *Vue instance through `vue.Get(structPtr)`
 //  which is actually `this` of the VueJS(javascript) side of world
-func New(cssSelector string, structPtr interface{}) *Vue {
+func New(selectorOrElementOrFunction interface{}, structPtr interface{}) *Vue {
 	o := vue.New(js.M{
-		"el":      cssSelector,
+		"el":      selectorOrElementOrFunction,
 		"data":    structPtr,
 		"methods": js.MakeWrapper(structPtr),
 	})
