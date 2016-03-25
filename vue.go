@@ -12,6 +12,77 @@ var (
 
 type Vue struct {
 	*js.Object
+	///////////////////////////// Instance Properties
+	// vm.$data
+	// 	Type: Object
+	// Details:
+	// 		The data object that the Vue instance is observing.
+	//  	You can swap it with a new object. The Vue instance proxies access to the properties on its data object.
+	Data *js.Object `js:"$data"`
+
+	// vm.$el
+	//  Type: HTMLElement
+	//  Read only
+	// Details:
+	//  	The DOM element that the Vue instance is managing.
+	// 		Note that for Fragment Instances, vm.$el will return an anchor node that
+	// 		indicates the starting position of the fragment.
+	El *js.Object `js:"$el"`
+
+	// vm.$options
+	//  Type: Object
+	//  Read only
+	// Details:
+	//    The instantiation options used for the current Vue instance.
+	//    This is useful when you want to include custom properties in the options:
+	//
+	// 	  new Vue({
+	// 	    customOption: 'foo',
+	// 	    created: function () {
+	// 	      console.log(this.$options.customOption) // -> 'foo'
+	// 	    }
+	// 	  })
+	Options *js.Object `js:"$options"`
+
+	// vm.$parent
+	//  Type: Vue instance
+	//  Read only
+	// Details:
+	// 		The parent instance, if the current instance has one.
+	Parent *js.Object `js:"$parent"`
+
+	// vm.$root
+	//  Type: Vue instance
+	//  Read only
+	// Details:
+	// 		The root Vue instance of the current component tree. If the current instance has no parents this value will be itself.
+	Root *js.Object `js:"$root"`
+
+	// vm.$children
+	//  Type: Array<Vue instance>
+	//  Read only
+	// Details:
+	// 	The direct child components of the current instance.
+	Children *js.Object `js:"$children"`
+
+	// vm.$refs
+	// 	Type: Object
+	// 	Read only
+	// Details:
+	// 	An object that holds child components that have v-ref registered.
+	// See also:
+	// 	Child Component Refs
+	// 	v-ref.
+	Refs *js.Object `js:"$refs"`
+
+	// vm.$els
+	// 	Type: Object
+	// 	Read only
+	// Details:
+	// 	An object that holds DOM elements that have v-el registered.
+	// See also: v-el.
+	Els *js.Object `js:"$els"`
+
 	// vm.$watch( expression, callback, [deep, immediate] )
 	//
 	// expression String
