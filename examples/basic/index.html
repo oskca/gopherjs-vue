@@ -3,12 +3,26 @@
 
 <head>
     <title>Test Vue</title>
+    <style type="text/css">
+    [v-cloak] {
+        display: none
+    }
+    </style>
 </head>
 
 <body>
-    <div id="app">
+    <div id="app" v-cloak>
         integer: <span> {{ integer }} </span>
         <br>
+        <template v-for="item in AllItems">
+            <label style="display: inline;">
+                {{item}}
+                <input type="checkbox" id="{{item}}" value="{{item}}" v-model="CheckedItems"></input>
+            </label>
+        </template>
+        <div>
+            <span>CheckedItems: {{ CheckedItems | json }}</span>
+        </div>
         <input v-model="integer">
         <button v-on:click="Inc">Inc</button>
         <button v-on:click="Repeat">Repeat</button>

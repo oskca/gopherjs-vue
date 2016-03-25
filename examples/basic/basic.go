@@ -25,10 +25,12 @@ func NewTodo(content string) *Todo {
 
 type Model struct {
 	*js.Object
-	IntValue int     `js:"integer"`
-	Str      string  `js:"str"`
-	List     []int   `js:"list"`
-	Todos    []*Todo `js:"todos"`
+	IntValue     int      `js:"integer"`
+	Str          string   `js:"str"`
+	List         []int    `js:"list"`
+	Todos        []*Todo  `js:"todos"`
+	CheckedItems []string `js:"CheckedItems"`
+	AllItems     []string `js:"AllItems"`
 }
 
 func (m *Model) Inc() {
@@ -56,6 +58,8 @@ func main() {
 	m.Str = "a string"
 	m.List = []int{1, 2, 3, 4}
 	m.Todos = []*Todo{}
+	m.AllItems = []string{"A", "B", "C", "D", "John", "Bill"}
+	m.CheckedItems = []string{}
 	v := vue.New("#app", m)
 	println("vm:", v)
 	v.WatchEx("integer", func(val *js.Object) {
