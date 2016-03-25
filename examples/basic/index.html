@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Test Vue</title>
+</head>
+
+<body>
+    <div id="app">
+        integer: <span> {{ integer }} </span>
+        <br>
+        <input v-model="integer">
+        <button v-on:click="Inc">Inc</button>
+        <button v-on:click="Repeat">Repeat</button>
+        <button v-on:click="PopulateTodo">PopulateTodo</button>
+        <li v-for="item in list">
+            {{ item }}
+        </li>
+        <input v-model="str"></input>
+        <ul v-for="todo in todos">
+            <li>{{todo.time}} - {{todo.content}}</li>
+        </ul>
+        <p>{{str}}</p>
+    </div>
+    <script type="text/javascript" src="basic.js"></script>
+</body>
+
+</html>

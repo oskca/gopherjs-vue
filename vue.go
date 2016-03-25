@@ -298,7 +298,7 @@ func Get(structPtr interface{}) *Vue {
 }
 
 // WatchEx using a simpler form to do Vue.$watch
-func (v *Vue) WatchX(expression string, callback func(newVal *js.Object)) (unwatcher func()) {
+func (v *Vue) WatchEx(expression string, callback func(newVal *js.Object)) (unwatcher func()) {
 	obj := v.Call("$watch", expression, callback)
 	return func() {
 		obj.Invoke()
