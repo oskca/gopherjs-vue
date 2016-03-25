@@ -25,12 +25,13 @@ func NewTodo(content string) *Todo {
 
 type Model struct {
 	*js.Object
-	IntValue     int      `js:"integer"`
-	Str          string   `js:"str"`
-	List         []int    `js:"list"`
-	Todos        []*Todo  `js:"todos"`
-	CheckedItems []string `js:"CheckedItems"`
-	AllItems     []string `js:"AllItems"`
+	IntValue     int           `js:"integer"`
+	Str          string        `js:"str"`
+	List         []int         `js:"list"`
+	Todos        []*Todo       `js:"todos"`
+	CheckedItems []string      `js:"CheckedItems"`
+	AllItems     []string      `js:"AllItems"`
+	Now          func() string `js:"Now"`
 }
 
 func (m *Model) Inc() {
@@ -48,6 +49,10 @@ func (m *Model) PopulateTodo() {
 	println("integer from vm:", vm.Get("integer").Int())
 }
 
+func (m *Model) Then() string {
+	return time.Now().String() + fmt.Sprintf(" ==> i:%d", m.IntValue)
+}
+
 func main() {
 	m := &Model{
 		Object: js.Global.Get("Object").New(),
@@ -60,6 +65,7 @@ func main() {
 	m.Todos = []*Todo{}
 	m.AllItems = []string{"A", "B", "C", "D", "John", "Bill"}
 	m.CheckedItems = []string{}
+	m.Now = func() string { return time.Now().String() + fmt.Sprintf(" ==> i:%d", m.IntValue) }
 	v := vue.New("#app", m)
 	println("vm:", v)
 	v.WatchEx("integer", func(val *js.Object) {
