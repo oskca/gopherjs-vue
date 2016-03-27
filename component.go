@@ -14,10 +14,15 @@ type pool struct {
 	counter   int
 }
 
-// NewComponent registers a global component. (automatically call Vue.extend)
+// NewComponent creates and registers a global component. (automatically call Vue.extend)
 //
-// vmCreator should return a gopherjs struct pointer. see New for more details
-func NewComponent(name string, vmCreator func() (structPtr interface{}), templateOrSharpId string, replaceMountPoint ...bool) *Component {
+//  vmCreator should return a gopherjs struct pointer. see New for more details
+func NewComponent(
+	name string,
+	vmCreator func() (structPtr interface{}),
+	templateOrSharpId string,
+	replaceMountPoint ...bool,
+) *Component {
 	creatorPool[name] = new(pool)
 	creatorPool[name].creator = vmCreator
 	creator := func() interface{} {
@@ -57,7 +62,7 @@ type Component struct {
 	*Vue
 }
 
-// Extend Create a “subclass” of the base Vue constructor. Which is a `Component`
+// Extend Create a “subclass” of the base Vue constructor which is a `Component`
 //  The argument should be an object containing component options.
 //  The special cases to note here are el and data options
 //  - they must be functions when used with Vue.extend().

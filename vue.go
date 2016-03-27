@@ -17,7 +17,8 @@ type Vue struct {
 	// 	Type: Object
 	// Details:
 	// 		The data object that the Vue instance is observing.
-	//  	You can swap it with a new object. The Vue instance proxies access to the properties on its data object.
+	//  	You can swap it with a new object.
+	// 		The Vue instance proxies access to the properties on its data object.
 	Data *js.Object `js:"$data"`
 
 	// vm.$el
@@ -55,7 +56,8 @@ type Vue struct {
 	//  Type: Vue instance
 	//  Read only
 	// Details:
-	// 		The root Vue instance of the current component tree. If the current instance has no parents this value will be itself.
+	// 		The root Vue instance of the current component tree.
+	// 		If the current instance has no parents this value will be itself.
 	Root *js.Object `js:"$root"`
 
 	// vm.$children
@@ -84,55 +86,56 @@ type Vue struct {
 	Els *js.Object `js:"$els"`
 
 	// vm.$watch( expression, callback, [deep, immediate] )
-	//
-	// expression String
-	// callback( newValue, oldValue ) Function
-	// deep Boolean optional
-	// immdediate Boolean optional
-	//
+	//  expression String
+	//  callback( newValue, oldValue ) Function
+	//  deep Boolean optional
+	//  immdediate Boolean optional
 	// Watch an expression on the Vue instance for changes.
 	// The expression can be a single keypath or actual expressions:
-	Watch func(expression string, callback func(newVal, oldVal *js.Object), deepWatch bool) (unwatcher func()) `js:"$watch"`
+	Watch func(
+		expression string,
+		callback func(newVal, oldVal *js.Object),
+		deepWatch bool,
+	) (unwatcher func()) `js:"$watch"`
+
 	// vm.$eval( expression )
-	//
-	// expression String
+	// 	expression String
 	// Evaluate an expression that can also contain filters.
-	//
 	// assuming vm.msg = 'hello'
 	// vm.$eval('msg | uppercase') // -> 'HELLO'
 	Eval func(expression string) *js.Object `js:"$eval"`
 
 	// vm.$get( expression )
-	//
-	// expression String
-	//
+	// 	expression String
 	// Retrieve a value from the Vue instance given an expression.
 	// Expressions that throw errors will be suppressed and return undefined.
 	Get func(expression string) *js.Object `js:"$get"`
 
 	// vm.$set( keypath, value )
-
-	// keypath String
-	// value *
-	//
+	// 	keypath String
+	// 	value *
 	// Set a data value on the Vue instance given a valid keypath.
 	// If the path doesn’t exist it will be created.
 	Set func(keypath string, val interface{}) `js:"$set"`
 
 	// vm.$add( keypath, value )
 	//
-	// keypath String
-	// value *
-	// Add a root level property to the Vue instance (and also its $data). Due to the limitations of ES5, Vue cannot detect properties directly added to or deleted from an Object, so use this method and vm.$delete when you need to do so. Additionally, all observed objects are augmented with these two methods too.
+	// 	keypath String
+	// 	value *
+	// Add a root level property to the Vue instance (and also its $data).
+	// Due to the limitations of ES5, Vue cannot detect properties directly
+	// added to or deleted from an Object,
+	// so use this method and vm.$delete when you need to do so. Additionally,
+	// all observed objects are augmented with these two methods too.
 	Add func(keypath string, val interface{}) `js:"$add"`
 
 	// vm.$delete( keypath )
-	//
-	// keypath String
+	// 	keypath String
 	// Delete a root level property on the Vue instance (and also its $data).
 	Delete func(keypath string) `js:"$delete"`
+
 	// vm.$interpolate( templateString )
-	// templateString String
+	// 	templateString String
 	// Evaluate a piece of template string containing mustache interpolations.
 	// Note that this method simply performs string interpolation;
 	// attribute directives are not compiled.
@@ -148,45 +151,46 @@ type Vue struct {
 	// you can use the event system to communicate between them.
 	//
 	// vm.$dispatch( event, [args…] )
-	// event String
-	// args… optional
+	//	event String
+	// 	args… optional
 	//
 	// Dispatch an event from the current vm that propagates all the way up to its $root.
 	// If a callback returns false, it will stop the propagation at its owner instance.
 	Dispatch func(event string, args ...interface{}) `js:"$dispatch"`
 
 	// vm.$broadcast( event, [args…] )
-	// event String
-	// args… optional
+	// 	event String
+	// 	args… optional
 	//
 	// Emit an event to all children vms of the current vm,
 	// which gets further broadcasted to their children all the way down.
-	// If a callback returns false, its owner instance will not broadcast the event any further.
+	// If a callback returns false, its owner instance will not broadcast
+	// the event any further.
 	Broadcast func(event string, args ...interface{}) `js:"$broadcast"`
 
 	// vm.$emit( event, [args…] )
-	// event String
+	// 	event String
 	// args… optional
 	//
 	// Trigger an event on this vm only.
 	Emit func(event string, args ...interface{}) `js:"$emit"`
 
 	// vm.$on( event, callback )
-	// event String
+	// 	event String
 	// callback Function
 	//
 	// Listen for an event on the current vm
 	On func(event string, callback interface{}) `js:"$on"`
 
 	// vm.$once( event, callback )
-	// event String
+	// 	event String
 	// callback Function
 	//
 	// Attach a one-time only listener for an event.
 	Once func(event string, callback interface{}) `js:"$once"`
 
 	// vm.$off( [event, callback] )
-	// event String optional
+	// 	event String optional
 	// callback Function optional
 	//
 	// If no arguments are given, stop listening for all events;
@@ -195,46 +199,60 @@ type Vue struct {
 	Off func(event ...string) `js:"$off"`
 
 	// DOM
-	// All vm DOM manipulation methods work like their jQuery counterparts - except they also trigger Vue.js transitions if there are any declared on vm’s $el. For more details on transitions see Adding Transition Effects.
+	// All vm DOM manipulation methods work like their jQuery counterparts -
+	// except they also trigger Vue.js transitions if there are any declared
+	// on vm’s $el. For more details on transitions see Adding Transition Effects.
 
 	// vm.$appendTo( element|selector, [callback] )
-	// element HTMLElement | selector String
+	// 	element HTMLElement | selector String
 	// callback Function optional
-	// Append the vm’s $el to target element. The argument can be either an element or a querySelector string.
+	// Append the vm’s $el to target element. The argument can be either
+	// an element or a querySelector string.
 	AppendTo func(elementOrselector string) `js:"$appendTo"`
 
 	// vm.$before( element|selector, [callback] )
-	// element HTMLElement | selector String
+	// 	element HTMLElement | selector String
 	// callback Function optional
 	// Insert the vm’s $el before target element.
 	Before func(elementOrselector string) `js:"$before"`
 
 	// vm.$after( element|selector, [callback] )
-	// element HTMLElement | selector String
+	// 	element HTMLElement | selector String
 	// callback Function optional
 	// Insert the vm’s $el after target element.
 	After func(elementOrselector string) `js:"$after"`
 
 	// vm.$remove( [callback] )
-	// callback Function optional
+	// 	callback Function optional
 	// Remove the vm’s $el from the DOM.
 	Remove func() `js:"$remove"`
 
 	/////////////////////   Lifecycle
 
 	// vm.$mount( [element|selector] )
-	// element HTMLElement | selector String optional
-	// If the Vue instance didn’t get an el option at instantiation, you can manually call $mount() to assign an element to it and start the compilation. If no argument is provided, an empty <div> will be automatically created. Calling $mount() on an already mounted instance will have no effect. The method returns the instance itself so you can chain other instance methods after it.
-	Mount func(elementOrselector string) `js:"$mount"`
+	// 	element HTMLElement | selector String optional
+	// If the Vue instance didn’t get an el option at instantiation,
+	// you can manually call $mount() to assign an element to it and
+	// start the compilation. If no argument is provided,
+	// an empty <div> will be automatically created. Calling $mount()
+	// on an already mounted instance will have no effect.
+	// The method returns the instance itself so you can chain other
+	// instance methods after it.
+	Mount func(elementOrselector string) *Vue `js:"$mount"`
 
 	// vm.$destroy( [remove] )
 	// remove Boolean optional
-	// Completely destroy a vm. Clean up its connections with other existing vms, unbind all its directives and remove its $el from the DOM. Also, all $on and $watch listeners will be automatically removed.
+	// Completely destroy a vm. Clean up its connections with other existing vms,
+	// unbind all its directives and remove its $el from the DOM.
+	// Also, all $on and $watch listeners will be automatically removed.
 	Destroy func(remove bool) `js:"$destroy"`
 
 	// vm.$compile( element )
-	// element HTMLElement
-	// Partially compile a piece of DOM (Element or DocumentFragment). The method returns a decompile function that tearsdown the directives created during the process. Note the decompile function does not remove the DOM. This method is exposed primarily for writing advanced custom directives.
+	// 	element HTMLElement
+	// Partially compile a piece of DOM (Element or DocumentFragment).
+	// The method returns a decompile function that tearsdown the directives
+	// created during the process. Note the decompile function does not remove
+	// the DOM. This method is exposed primarily for writing advanced custom directives.
 	Compile func(element string) `js:"$compile"`
 
 	// vm.$addChild( [options, constructor] )
@@ -254,7 +272,9 @@ type Vue struct {
 	// vm.$log( [keypath] )
 	//
 	// keypath String optional
-	// Log the current instance data as a plain object, which is more console-inspectable than a bunch of getter/setters. Also accepts an optional key.
+	// Log the current instance data as a plain object, which is more
+	// console-inspectable than a bunch of getter/setters.
+	// Also accepts an optional key.
 	//
 	// vm.$log() // logs entire ViewModel data
 	// vm.$log('item') // logs vm.item
@@ -266,13 +286,13 @@ type Vue struct {
 // instance with the `structPtr`, you can use `vue.GetVM` from you code to
 // access the generated VueJS Instance (can be used as `this` for JavaScirpt side).
 //
-//  all `exported fields` of the `struct` would become VueJS Instance's data
+//  * all `exported fields` of the `struct` would become VueJS Instance's data
 //  which can be used in the html to do data binding: v-bind, etc
 //
-//  all `exported funcs` of the `struct` would become VueJS Instance's methods
+//  * all `exported funcs` of the `struct` would become VueJS Instance's methods
 //  which can be called as html event handler: v-on, etc
 //
-//  the `struct` talked above should have an embeded anonymous `*js.Object` field
+//  * the `struct` talked above should have an embeded anonymous `*js.Object` field
 //  and `exported fields` should have proper `js struct tag` for
 //  bidirectionaly data bindings
 //
@@ -280,13 +300,13 @@ type Vue struct {
 //
 // Rules for exported functions usage:
 //
-// * If your func uses any of the `exported fields`, then DONOT modify any.
-//   These can be viewed roughly as `computed attribute` in `VueJS` wourld,
-//   with the form of function invocation (invoke).
+//  * If your func uses any of the `exported fields`, then DONOT modify any.
+//  These can be viewed roughly as `computed attribute` in `VueJS` wourld,
+//  with the form of function invocation (invoke).
 //
-// * If your func modifies any of the `exported fields`, then DONOT use it
-//   in any data `DISPLAYing` expression or directive. They can be used as
-//   event handlers (their main use cases).
+//  * If your func modifies any of the `exported fields`, then DONOT use it
+//  in any data `DISPLAYing` expression or directive. They can be used as
+//  event handlers (their main use cases).
 //
 // These rules are required for VueJS dependency system to work correctly.
 //
@@ -305,8 +325,9 @@ func New(selectorOrElementOrFunction interface{}, structPtr interface{}) *Vue {
 	return vm
 }
 
-// GetVM returns coresponding VueJS instance from a gopherjs struct pointer (the underlying ViewModel data)
-// this function is mainly in gopherjs struct method functions to reference the `VueJS instance`
+// GetVM returns coresponding VueJS instance from a gopherjs struct pointer
+// (the underlying ViewModel data), this function is mainly in
+// gopherjs struct method functions to reference the `VueJS instance`
 func GetVM(structPtr interface{}) *Vue {
 	vm, ok := vMap[structPtr]
 	if !ok {
