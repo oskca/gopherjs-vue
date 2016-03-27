@@ -24,7 +24,7 @@ func NewTodo(content string) *Todo {
 }
 
 type Model struct {
-	*js.Object
+	*js.Object                 // this is needed for bidirectional data bindings
 	IntValue     int           `js:"integer"`
 	Str          string        `js:"str"`
 	List         []int         `js:"list"`

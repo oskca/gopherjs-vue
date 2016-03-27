@@ -1,5 +1,5 @@
-// Package vue provides gopherjs bindings for VueJS. see func `New` for
-//  futher information
+// Package vue provides gopherjs bindings for VueJS. see func `New` and
+// the examples for detailed usage instructions.
 package vue
 
 import (
@@ -294,19 +294,23 @@ type Vue struct {
 }
 
 // New creates a VueJS Instance to apply bidings between `structPtr` and
-// `selectorOrElementOrFunction` target, it also connects the generated VueJS
-// instance with the `structPtr`, you can use `vue.GetVM` from you code to
-// access the generated VueJS Instance (can be used as `this` for JavaScirpt side).
+// `selectorOrElementOrFunction` target, it also connects the generated
+// VueJS instance with the `structPtr`, you can use `vue.GetVM` from
+// you code to get the generated VueJS Instance which can be used as `this`
+// for JavaScirpt side.
 //
-//  * all `exported fields` of the `struct` would become VueJS Instance's data
-//  which can be used in the html to do data binding: v-bind, etc
+//  * all `exported fields` of the `struct` would become VueJS Instance's
+//  data which can be used in the html to do data binding: v-bind, etc
 //
-//  * all `exported funcs` of the `struct` would become VueJS Instance's methods
-//  which can be called as html event handler: v-on, etc
+//  * all `exported funcs` of the `struct` would become VueJS Instance's
+//  methods which can be called as html event handler: v-on, etc
 //
-//  * the `struct` talked above should have an embeded anonymous `*js.Object` field
-//  and `exported fields` should have proper `js struct tag` for
-//  bidirectionaly data bindings
+//  * the `struct` talked above should have an embeded anonymous
+//  `*js.Object` field and `exported fields` should have proper
+//  `js struct tag` for bidirectionaly data bindings
+//
+//  * if the `struct` has no embeded anonymous `*js.Object`, it can
+//  only be used for information displaying purpose.
 //
 // Rules for exported functions usage IMPORTANT!:
 //
