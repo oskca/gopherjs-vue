@@ -34,32 +34,35 @@ type Model struct {
 	Now          func() string `js:"Now"`
 }
 
-func (m *Model) Inc() {
+func (m Model) Inc() {
 	m.IntValue += 1
 }
 
-func (m *Model) Repeat() {
+func (m Model) Repeat() {
 	m.Str = strings.Repeat(m.Str, 3)
 }
 
-func (m *Model) PopulateTodo() {
+func (m Model) PopulateTodo() {
 	m.Todos = append(m.Todos, NewTodo(m.Str))
 	vm := vue.Get(m)
 	println("Get(m):", vm)
 	println("integer from vm:", vm.Get("integer").Int())
 }
 
-func (m *Model) Then() string {
+func (m Model) Then() string {
+	m.IntValue += 1
 	return time.Now().String() + fmt.Sprintf(" ==> i:%d", m.IntValue)
 }
 
 func main() {
 	m := &Model{
-		Object: js.Global.Get("Object").New(),
+		Object:   js.Global.Get("Object").New(),
+		IntValue: 100,
+		List:     []int{1, 2, 3, 4},
 	}
 	// this is the correct way to initialize the gopherjs struct
 	// which would be used in the JavaScript side.
-	m.IntValue = 100
+	// m.IntValue = 100
 	m.Str = "a string"
 	m.List = []int{1, 2, 3, 4}
 	m.Todos = []*Todo{}

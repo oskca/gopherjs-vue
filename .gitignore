@@ -22,3 +22,7 @@ _testmain.go
 *.exe
 *.test
 *.prof
+examples/basic/basic.js.map
+examples/basic/basic.js
+examples/unwritableTime/unwritableTime.js
+examples/unwritableTime/unwritableTime.js.map

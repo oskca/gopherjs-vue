@@ -8,18 +8,6 @@ func Directive(name string, opt js.M) {
 	vue.Call("directive", name, opt)
 }
 
-func Extend(opt js.M) *js.Object {
-	return vue.Call("extend", opt)
-}
-
-func RegisterComponent(name string, cpnt *js.Object) {
-	vue.Call("component", name, cpnt)
-}
-
-func Component(name string, opt js.M) {
-	vue.Call("component", name, opt)
-}
-
 func Filter(name string, fn func(*js.Object) *js.Object) {
 	vue.Call("filter", name, fn)
 }
