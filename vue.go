@@ -276,6 +276,20 @@ type Vue struct {
 //  and `exported fields` should have proper `js struct tag` for
 //  bidirectionaly data bindings
 //
+/////////////// ONE IMPORTANT NOTICE `struct exported funcs` ///////////////////
+//
+// Rules for exported functions usage:
+//
+// * If your func uses any of the `exported fields`, then DONOT modify any.
+//   These can be viewed roughly as `computed attribute` in `VueJS` wourld,
+//   with the form of function invocation (invoke).
+//
+// * If your func modifies any of the `exported fields`, then DONOT use it
+//   in any data `DISPLAYing` expression or directive. They can be used as
+//   event handlers (their main use cases).
+//
+// These rules are required for VueJS dependency system to work correctly.
+//
 // You can get this *Vue instance through `vue.GetVM(structPtr)`
 // which acts as `this` of the VueJS(javascript) side of world
 func New(selectorOrElementOrFunction interface{}, structPtr interface{}) *Vue {
@@ -296,7 +310,7 @@ func New(selectorOrElementOrFunction interface{}, structPtr interface{}) *Vue {
 func GetVM(structPtr interface{}) *Vue {
 	vm, ok := vMap[structPtr]
 	if !ok {
-		println("Unregistered Vue:", structPtr)
+		println("Vue not registerd yet:", structPtr)
 		panic("Vue not registerd yet")
 	}
 	return vm
