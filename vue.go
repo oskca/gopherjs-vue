@@ -263,17 +263,21 @@ type Vue struct {
 
 // New creates a VueJS Instance to apply bidings between `structPtr` and
 // `selectorOrElementOrFunction` target, it also connects the generated VueJS
-// instance with the `structPtr`, you can use `vue.Get` from you code to
+// instance with the `structPtr`, you can use `vue.GetVM` from you code to
 // access the generated VueJS Instance (can be used as `this` for JavaScirpt side).
 //
-//  all `exported field` of the `struct` would become VueJS Instance's data
+//  all `exported fields` of the `struct` would become VueJS Instance's data
 //  which can be used in the html to do data binding: v-bind, etc
 //
 //  all `exported funcs` of the `struct` would become VueJS Instance's methods
 //  which can be called as html event handler: v-on, etc
 //
-//  You can get this *Vue instance through `vue.Get(structPtr)`
-//  which is actually `this` of the VueJS(javascript) side of world
+//  the `struct` talked above should have an embeded anonymous `*js.Object` field
+//  and `exported fields` should have proper `js struct tag` for
+//  bidirectionaly data bindings
+//
+// You can get this *Vue instance through `vue.GetVM(structPtr)`
+// which acts as `this` of the VueJS(javascript) side of world
 func New(selectorOrElementOrFunction interface{}, structPtr interface{}) *Vue {
 	o := vue.New(js.M{
 		"el":      selectorOrElementOrFunction,
@@ -287,8 +291,9 @@ func New(selectorOrElementOrFunction interface{}, structPtr interface{}) *Vue {
 	return vm
 }
 
-// Get returns the related *Vue instance (as this for VueJS)
-func Get(structPtr interface{}) *Vue {
+// GetVM returns coresponding VueJS instance from a gopherjs struct pointer (the underlying ViewModel data)
+// this function is mainly in gopherjs struct method functions to reference the `VueJS instance`
+func GetVM(structPtr interface{}) *Vue {
 	vm, ok := vMap[structPtr]
 	if !ok {
 		println("Unregistered Vue:", structPtr)

@@ -15,6 +15,8 @@ type pool struct {
 }
 
 // NewComponent registers a global component. (automatically call Vue.extend)
+//
+// vmCreator should return a gopherjs struct pointer. see New for more details
 func NewComponent(name string, vmCreator func() (structPtr interface{}), templateOrSharpId string, replaceMountPoint ...bool) *Component {
 	creatorPool[name] = new(pool)
 	creatorPool[name].creator = vmCreator
