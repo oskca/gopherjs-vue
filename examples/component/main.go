@@ -12,7 +12,7 @@ type Com struct {
 
 func (c *Com) Hello() {
 	println("hello" + c.Text)
-	vm := vue.Get(c)
+	vm := vue.GetVM(c)
 	println("vm from Hello:", vm)
 	println("vm.get:", vm.Get("text").String())
 }

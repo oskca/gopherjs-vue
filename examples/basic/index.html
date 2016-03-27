@@ -14,25 +14,26 @@
     <div id="app" v-cloak>
         integer: <span> {{ integer }} </span>
         <br>
-        <div>Field Func: {{Now()}}</div>
-        <div>Method Func: {{Then()}}</div>
+        <div>Field Func: {{ Now() }}</div>
+        <div>Methond Func: {{ WhatTF() }}</div>
+        <div>DoubleInt: {{ DoubleInt() }}</div>
         <template v-for="item in AllItems">
             <label style="display: inline;">
                 {{item}}
-                <input type="checkbox" id="{{item}}" value="{{item}}" v-model="CheckedItems"></input>
+                <input type="checkbox" id="{{item}}" value="{{item}}" v-model="CheckedItems" />
             </label>
         </template>
         <div>
             <span>CheckedItems: {{ CheckedItems | json }}</span>
         </div>
         <input v-model="integer">
-        <button v-on:click="Inc">Inc</button>
-        <button v-on:click="Repeat">Repeat</button>
-        <button v-on:click="PopulateTodo">PopulateTodo</button>
+        <button @click="Inc">Inc</button>
+        <button @click="Repeat">Repeat</button>
+        <button @click="PopulateTodo">PopulateTodo</button>
         <li v-for="item in list">
             {{ item }}
         </li>
-        <input v-model="str"></input>
+        <input v-model="str" />
         <ul v-for="todo in todos">
             <li>{{todo.time}} - {{todo.content}}</li>
         </ul>

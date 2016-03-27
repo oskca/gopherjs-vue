@@ -69,8 +69,9 @@ func Extend(opt js.M) *Component {
 	}
 }
 
-func RegisterComponent(name string, component *Component) {
+func RegisterComponent(name string, component *Component) *Component {
 	vue.Call("component", name, component.Object)
+	return component
 }
 
 func GetComponent(name string) *Component {
