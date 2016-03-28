@@ -11,6 +11,7 @@ var (
 	vMap = make(map[interface{}]*Vue, 0)
 )
 
+// type Vue represents the JavaScript side VueJS instance or VueJS component
 type Vue struct {
 	*js.Object
 	///////////////////////////// Instance Properties
