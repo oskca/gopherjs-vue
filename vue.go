@@ -11,6 +11,30 @@ var (
 	vMap = make(map[interface{}]*Vue, 0)
 )
 
+// type Value represents the VueJS wrapped observed Array or Object
+// the wrapped methods can be used trigger view update.
+// `*Value` is usually returned by calling `Vue.Get()`
+type Value struct {
+	/////// Normal value operation as js.Object
+	*js.Object
+
+	/////// VueJS wrapped Array Operations
+	/////// in fact normal gopherjs slice ops would effect
+	/////// the save way
+	// Add in the bottom of the array
+	Push func(any interface{}) (idx int) `js:"push"`
+	// Remove in the bottom of the array
+	Pop func() (idx int) `js:"pop"`
+	// Add in the front of the array
+	Unshift func(any interface{}) (idx int) `js:"unshift"`
+	// Remove in the front of the array
+	Shift func() (idx int) `js:"shift"`
+	// array slice operation
+	Splice  func() *js.Object                                 `js:"splice"`
+	Sort    func(sorter func(a, b *js.Object) int) *js.Object `js:"sort"`
+	Reverse func() *js.Object                                 `js:"reverse"`
+}
+
 // type Vue represents the JavaScript side VueJS instance or VueJS component
 type Vue struct {
 	*js.Object
@@ -113,7 +137,7 @@ type Vue struct {
 	// Retrieve a value from the Vue instance given an expression.
 	// Expressions that throw errors will be suppressed
 	// and return undefined.
-	Get func(expression string) *js.Object `js:"$get"`
+	Get func(expression string) *Value `js:"$get"`
 
 	// vm.$set( keypath, value )
 	// 	keypath String
