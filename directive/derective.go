@@ -25,12 +25,12 @@ type Context struct {
 	Params *js.Object `js:"params"`
 }
 
-func makeUpdater(fn func(ctx *Context, newValue, oldValue *js.Object)) *js.Object {
+func makeUpdater(fn func(ctx *Context, val *js.Object)) *js.Object {
 	return js.MakeFunc(func(this *js.Object, args []*js.Object) interface{} {
 		ctx := &Context{
 			Object: this,
 		}
-		fn(ctx, args[0], args[1])
+		fn(ctx, args[0])
 		return nil
 	})
 }
@@ -47,7 +47,7 @@ func makeBinder(fn func(*Context)) *js.Object {
 
 // func Directive(
 // 	name string,
-// 	update func(ctx *Context, newValue, oldValue *js.Object),
+// 	update func(ctx *Context, val *js.Object),
 // ) {
 // 	fn := js.MakeFunc(func(this *js.Object, args []*js.Object) interface{} {
 // 		ctx := &Context{
@@ -62,7 +62,7 @@ func makeBinder(fn func(*Context)) *js.Object {
 // func DirectiveEx(
 // 	name string,
 // 	bind func(ctx *Context),
-// 	update func(ctx *Context, newValue, oldValue *js.Object),
+// 	update func(ctx *Context, val *js.Object),
 // 	unbind func(ctx *Context),
 // ) {
 // 	fnInit := js.MakeFunc(func(this *js.Object, args []*js.Object) interface{} {
@@ -95,7 +95,7 @@ func makeBinder(fn func(*Context)) *js.Object {
 
 // func Directive(
 // 	name string,
-// 	update func(ctx *Context, newValue, oldValue *js.Object),
+// 	update func(ctx *Context, val *js.Object),
 // ) {
 // 	vue.Call("directive", name, makeUpdater(update))
 // }
@@ -103,7 +103,7 @@ func makeBinder(fn func(*Context)) *js.Object {
 // func DirectiveEx(
 // 	name string,
 // 	bind func(ctx *Context),
-// 	update func(ctx *Context, newValue, oldValue *js.Object),
+// 	update func(ctx *Context, val *js.Object),
 // 	unbind func(ctx *Context),
 // ) {
 // 	vue.Call("directive", name, js.M{
@@ -130,7 +130,7 @@ func makeBinder(fn func(*Context)) *js.Object {
 // able to manipulate that element and its children.
 // func ElementDirective(
 // 	name string,
-// 	update func(ctx *Context, newValue, oldValue *js.Object),
+// 	update func(ctx *Context, val *js.Object),
 // ) {
 // 	vue.Call("elementDirective", name, makeUpdater(update))
 // }
@@ -138,7 +138,7 @@ func makeBinder(fn func(*Context)) *js.Object {
 // func ElementDirectiveEx(
 // 	name string,
 // 	bind func(ctx *Context),
-// 	update func(ctx *Context, newValue, oldValue *js.Object),
+// 	update func(ctx *Context, val *js.Object),
 // 	unbind func(ctx *Context),
 // ) {
 // 	vue.Call("elementDirective", name, js.M{
@@ -187,7 +187,7 @@ type Directive struct {
 	Priority int `js:"priority"`
 }
 
-func New(name string, updater ...func(ctx *Context, newValue, oldValue *js.Object)) *Directive {
+func New(name string, updater ...func(ctx *Context, val *js.Object)) *Directive {
 	d := &Directive{
 		Name:   name,
 		Object: js.Global.Get("Object").New(),
@@ -208,7 +208,7 @@ func (d *Directive) SetUnBinder(fn func(ctx *Context)) *Directive {
 	return d
 }
 
-func (d *Directive) SetUpdater(fn func(ctx *Context, newValue, oldValue *js.Object)) *Directive {
+func (d *Directive) SetUpdater(fn func(ctx *Context, val *js.Object)) *Directive {
 	d.Set("update", makeUpdater(fn))
 	return d
 }
