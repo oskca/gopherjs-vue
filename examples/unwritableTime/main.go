@@ -8,7 +8,7 @@ import (
 
 type Test struct {
 	*js.Object
-	Time time.Time `js:"time"`
+	Time time.Time `js:"Time"`
 	Text string    `js:"Text"`
 }
 
@@ -19,5 +19,5 @@ func main() {
 	t.Text = "Hello World"
 	t.Time = time.Now()
 	vm := vue.New("#app", t)
-	println(t, vm)
+	js.Global.Set("vm", vm)
 }

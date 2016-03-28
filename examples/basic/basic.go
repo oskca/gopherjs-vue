@@ -50,6 +50,10 @@ func (m *Model) PopulateTodo() {
 	println("integer from vm:", vm.Get("integer").Int())
 }
 
+func (m *Model) ShiftTodo() {
+	m.Todos = m.Todos[1:]
+}
+
 func (m *Model) WhatTF() string {
 	println("then called", m.IntValue)
 	// m.List = append(m.List, m.IntValue)
@@ -81,4 +85,5 @@ func main() {
 		println("IntValue changed to:", val, "m.IntValue:", m.IntValue)
 		m.Str = fmt.Sprintf("after watch:%d", m.IntValue)
 	})
+	js.Global.Set("vm", v)
 }
