@@ -47,6 +47,14 @@ func (m *Model) PopulateTodo() {
 	m.Todos = append(m.Todos, NewTodo(m.Str))
 	vm := vue.GetVM(m)
 	println("Get(m):", vm)
+	println("m keys:", js.Keys(m.Object))
+	for i, key := range js.Keys(m.Object) {
+		println(i, key)
+	}
+	println("vm keys:", js.Keys(vm.Object))
+	for i, key := range js.Keys(vm.Object) {
+		println(i, key)
+	}
 	println("integer from vm:", vm.Get("integer").Int())
 }
 
