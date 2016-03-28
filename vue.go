@@ -119,7 +119,7 @@ type Vue struct {
 	//  immdediate Boolean optional
 	// Watch an expression on the Vue instance for changes.
 	// The expression can be a single keypath or actual expressions:
-	Watch func(
+	WatchEx func(
 		expression string,
 		callback func(newVal, oldVal *js.Object),
 		deepWatch bool,
@@ -316,6 +316,13 @@ type Vue struct {
 	// vm.$log() // logs entire ViewModel data
 	// vm.$log('item') // logs vm.item
 	Log func(keypath ...interface{}) `js:"$log"`
+
+	// Defer the callback to be executed after the next DOM update cycle.
+	// Use it immediately after you’ve changed some data to
+	// wait for the DOM update. This is the same as the global
+	// Vue.nextTick, except that the callback’s this context is
+	// automatically bound to the instance calling this method.
+	NextTick func(cb func()) `js:"$nextTick"`
 }
 
 // New creates a VueJS Instance to apply bidings between `structPtr` and
@@ -377,7 +384,7 @@ func GetVM(structPtr interface{}) *Vue {
 }
 
 // WatchEx using a simpler form to do Vue.$watch
-func (v *Vue) WatchEx(expression string, callback func(newVal *js.Object)) (unwatcher func()) {
+func (v *Vue) Watch(expression string, callback func(newVal *js.Object)) (unwatcher func()) {
 	obj := v.Call("$watch", expression, callback)
 	return func() {
 		obj.Invoke()
