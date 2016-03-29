@@ -8,15 +8,16 @@ import (
 	"time"
 )
 
+// no *js.Object struct can only be manipulated by ViewModel.methods
 type Todo struct {
-	*js.Object
-	Time    string `js:"time"`
-	Content string `js:"content"`
+	// *js.Object
+	Time    string //`js:"Time"`
+	Content string //`js:"Content"`
 }
 
 func NewTodo(content string) *Todo {
 	t := &Todo{
-		Object: js.Global.Get("Object").New(),
+	//Object: js.Global.Get("Object").New(),
 	}
 	t.Time = time.Now().Format("15:04 05:06")
 	t.Content = content
@@ -41,10 +42,6 @@ func (m *Model) Inc() {
 
 func (m *Model) Repeat() {
 	m.Str = strings.Repeat(m.Str, 3)
-}
-
-func (m *Model) PopulateTodo() {
-	m.Todos = append(m.Todos, NewTodo(m.Str))
 	vm := vue.GetVM(m)
 	println("Get(m):", vm)
 	println("m keys:", js.Keys(m.Object))
@@ -58,8 +55,18 @@ func (m *Model) PopulateTodo() {
 	println("integer from vm:", vm.Get("integer").Int())
 }
 
+func (m *Model) PopulateTodo() {
+	// m.Todos = append(m.Todos, NewTodo(m.Str))
+	vm := vue.GetVM(m)
+	todos := vm.Get("todos")
+	todos.Unshift(NewTodo(m.Str))
+}
+
 func (m *Model) ShiftTodo() {
-	m.Todos = m.Todos[1:]
+	// m.Todos = m.Todos[1:]
+	vm := vue.GetVM(m)
+	todos := vm.Get("todos")
+	todos.Shift()
 }
 
 func (m *Model) WhatTF() string {
