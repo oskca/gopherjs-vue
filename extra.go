@@ -1,13 +1,5 @@
 package vue
 
-import (
-	"github.com/gopherjs/gopherjs/js"
-)
-
-func Filter(name string, fn func(*js.Object) *js.Object) {
-	vue.Call("filter", name, fn)
-}
-
 // Vue.partial( id, [definition] )
 // id String
 // definition String | Node optional
