@@ -199,11 +199,11 @@ func (c *Option) SetDataWithMethods(structPtr interface{}) *Option {
 
 // AddMethod adds new method `name` to VueJS intance or component
 // using mixins thus will never conflict with Option.SetDataWithMethods
-func (o *Option) AddMethod(name string, fn func(vm *ViewModel)) *Option {
+func (o *Option) AddMethod(name string, fn func(vm *ViewModel, args []*js.Object)) *Option {
 	return o.addMixin("methods", js.M{
 		name: js.MakeFunc(func(this *js.Object, arguments []*js.Object) interface{} {
 			vm := newViewModel(this)
-			fn(vm)
+			fn(vm, arguments)
 			return nil
 		}),
 	})
