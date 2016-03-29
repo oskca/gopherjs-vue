@@ -358,9 +358,9 @@ type ViewModel struct {
 //
 // You can get this *ViewModel instance through `vue.GetVM(structPtr)`
 // which acts as `this` of the VueJS(javascript) side of world
-func New(selectorOrElementOrFunction interface{}, structPtr interface{}) *ViewModel {
+func New(selectorOrHTMLElement interface{}, structPtr interface{}) *ViewModel {
 	opt := NewOption()
-	opt.El = selectorOrElementOrFunction
+	opt.El = selectorOrHTMLElement
 	opt.SetDataWithMethods(structPtr)
 	vm := opt.NewViewModel()
 	vMap[structPtr] = vm

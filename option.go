@@ -197,10 +197,17 @@ func (c *Option) SetDataWithMethods(structPtr interface{}) *Option {
 	return c
 }
 
-// func (c *Option) OnLifeCycleEvent(evt LifeCycleEvent, fn interface{}) *Option {
-// 	c.addMixin(string(evt), fn)
-// 	return c
-// }
+// AddMethod adds new method `name` to VueJS intance or component
+// using mixins thus will never conflict with Option.SetDataWithMethods
+func (o *Option) AddMethod(name string, fn func(vm *ViewModel)) *Option {
+	return o.addMixin("methods", js.M{
+		name: js.MakeFunc(func(this *js.Object, arguments []*js.Object) interface{} {
+			vm := newViewModel(this)
+			fn(vm)
+			return nil
+		}),
+	})
+}
 
 func (o *Option) OnLifeCycleEvent(evt LifeCycleEvent, fn func(vm *ViewModel)) *Option {
 	return o.addMixin(
@@ -242,8 +249,11 @@ func (c *Option) AddSubComponent(name string, sub *Component) *Option {
 
 // On add EventHandler to VueJS-generated component-oriented event
 // for cross component message passing
-func (c *Option) On(name string, fn interface{}) *Option {
-	c.mevt[name] = fn
+func (c *Option) On(event string, fn func(vm *ViewModel, args []*js.Object)) *Option {
+	c.mevt[event] = js.MakeFunc(func(this *js.Object, args []*js.Object) interface{} {
+		fn(newViewModel(this), args)
+		return nil
+	})
 	return c
 }
 
