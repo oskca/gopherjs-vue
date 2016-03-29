@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/gopherjs/gopherjs/js"
-	"github.com/oskca/gopherjs-vue"
 	"time"
 )
 
@@ -17,7 +16,6 @@ func main() {
 		Object: js.Global.Get("Object").New(),
 	}
 	t.Text = "Hello World"
+	println(time.Now())
 	t.Time = time.Now()
-	vm := vue.New("#app", t)
-	js.Global.Set("vm", vm)
 }

@@ -24,4 +24,7 @@ func main() {
 	}
 	m.Text = "a string"
 	vue.New("body", m)
+	m2 := &Model{
+		Object: js.Global.Get("Object").New(),
+	}
 }

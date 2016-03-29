@@ -89,7 +89,7 @@ func main() {
 		return time.Now().String() + fmt.Sprintf(" ==> i:%d", m.IntValue)
 	}
 	v := vue.New("#app", m)
-	v.WatchEx("integer", func(val *js.Object) {
+	v.Watch("integer", func(val *js.Object) {
 		println("IntValue changed to:", val, "m.IntValue:", m.IntValue)
 		m.Str = fmt.Sprintf("after watch:%d", m.IntValue)
 	})
