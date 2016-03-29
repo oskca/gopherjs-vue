@@ -8,7 +8,7 @@ import (
 
 var (
 	vue  = js.Global.Get("Vue")
-	vMap = make(map[interface{}]*Vue, 0)
+	vMap = make(map[interface{}]*ViewModel, 0)
 )
 
 // type Value represents the VueJS wrapped observed Array or Object
@@ -36,7 +36,7 @@ type Value struct {
 }
 
 // type Vue represents the JavaScript side VueJS instance or VueJS component
-type Vue struct {
+type ViewModel struct {
 	*js.Object
 	///////////////////////////// Instance Properties
 	// vm.$data
@@ -270,7 +270,7 @@ type Vue struct {
 	// on an already mounted instance will have no effect.
 	// The method returns the instance itself so you can chain other
 	// instance methods after it.
-	Mount func(elementOrselector string) *Vue `js:"$mount"`
+	Mount func(elementOrselector string) *ViewModel `js:"$mount"`
 
 	// vm.$destroy( [remove] )
 	//  remove Boolean optional
@@ -356,35 +356,36 @@ type Vue struct {
 //
 // These rules are required for VueJS dependency system to work correctly.
 //
-// You can get this *Vue instance through `vue.GetVM(structPtr)`
+// You can get this *ViewModel instance through `vue.GetVM(structPtr)`
 // which acts as `this` of the VueJS(javascript) side of world
-func New(selectorOrElementOrFunction interface{}, structPtr interface{}) *Vue {
-	o := vue.New(js.M{
-		"el":      selectorOrElementOrFunction,
-		"data":    structPtr,
-		"methods": js.MakeWrapper(structPtr),
-	})
-	vm := &Vue{
-		Object: o,
-	}
+func New(selectorOrElementOrFunction interface{}, structPtr interface{}) *ViewModel {
+	opt := NewOption()
+	opt.El = selectorOrElementOrFunction
+	opt.SetDataWithMethods(structPtr)
+	vm := opt.NewViewModel()
 	vMap[structPtr] = vm
 	return vm
+}
+
+func newViewModel(o *js.Object) *ViewModel {
+	return &ViewModel{
+		Object: o,
+	}
 }
 
 // GetVM returns coresponding VueJS instance from a gopherjs struct pointer
 // (the underlying ViewModel data), this function is mainly in
 // gopherjs struct method functions to reference the `VueJS instance`
-func GetVM(structPtr interface{}) *Vue {
+func GetVM(structPtr interface{}) *ViewModel {
 	vm, ok := vMap[structPtr]
 	if !ok {
-		println("Vue not registerd yet:", structPtr)
-		panic("Vue not registerd yet")
+		panic("GetVM: Vue not registerd yet")
 	}
 	return vm
 }
 
 // WatchEx using a simpler form to do Vue.$watch
-func (v *Vue) Watch(expression string, callback func(newVal *js.Object)) (unwatcher func()) {
+func (v *ViewModel) Watch(expression string, callback func(newVal *js.Object)) (unwatcher func()) {
 	obj := v.Call("$watch", expression, callback)
 	return func() {
 		obj.Invoke()
