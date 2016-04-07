@@ -31,12 +31,13 @@
         <button @click="Repeat">Repeat</button>
         <button @click="PopulateTodo">PopulateTodo</button>
         <button @click="ShiftTodo">ShiftTodo</button>
+        <button @click="MapTodos">MapTodos</button>
         <li v-for="item in list">
             {{ item }}
         </li>
         <input v-model="str" />
         <ul v-for="todo in todos">
-            <li>{{todo.Time}} - {{todo.Content}}</li>
+            <li>{{todo.Time | timeFormat}} - {{todo.Content}}</li>
         </ul>
         <p>{{str}}</p>
     </div>

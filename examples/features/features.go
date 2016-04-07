@@ -4,23 +4,22 @@ import (
 	"fmt"
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/oskca/gopherjs-vue"
+	"math/rand"
 	"strings"
 	"time"
 )
 
 // no *js.Object struct can only be manipulated by ViewModel.methods
 type Todo struct {
-	// *js.Object
-	Time    string //`js:"Time"`
-	Content string //`js:"Content"`
+	Time    time.Time
+	Content string
 }
 
 func NewTodo(content string) *Todo {
 	t := &Todo{
-	//Object: js.Global.Get("Object").New(),
+		Time:    time.Now(),
+		Content: content,
 	}
-	t.Time = time.Now().Format("15:04 05:06")
-	t.Content = content
 	return t
 }
 
@@ -45,21 +44,37 @@ func (m *Model) Repeat() {
 	vm := vue.GetVM(m)
 	println("Get(m):", vm)
 	println("m keys:", js.Keys(m.Object))
-	for i, key := range js.Keys(m.Object) {
-		println(i, key)
-	}
-	println("vm keys:", js.Keys(vm.Object))
-	for i, key := range js.Keys(vm.Object) {
-		println(i, key)
-	}
+	// for i, key := range js.Keys(m.Object) {
+	// 	println(i, key)
+	// }
+	// println("vm keys:", js.Keys(vm.Object))
+	// for i, key := range js.Keys(vm.Object) {
+	// 	println(i, key)
+	// }
 	println("integer from vm:", vm.Get("integer").Int())
 }
 
 func (m *Model) PopulateTodo() {
+	// using append would cause GopherJS internalization problems
+	// so it's better to use VueJS ops to manipulates the array
 	// m.Todos = append(m.Todos, NewTodo(m.Str))
 	vm := vue.GetVM(m)
 	todos := vm.Get("todos")
 	todos.Unshift(NewTodo(m.Str))
+}
+
+func (m *Model) MapTodos() {
+	data := []*Todo{}
+	for i := 0; i < 10; i++ {
+		str := fmt.Sprintf("%05d", rand.Int63n(100000))
+		data = append(data, NewTodo(str))
+	}
+	obj := js.Global.Get("Object").New()
+	obj.Set("todos", data)
+	obj.Set("wtf", time.Now())
+	vm := vue.GetVM(m)
+	// wtf would be created in `vm`, this way works but not suggested
+	vm.FromJS(obj)
 }
 
 func (m *Model) ShiftTodo() {
@@ -80,6 +95,11 @@ func (m *Model) DoubleInt() int {
 }
 
 func main() {
+	// register a time formating filter
+	vue.NewFilter(func(t time.Time) string {
+		return t.Format("2006-01-02 15:04:05")
+	}).Register("timeFormat")
+	// begin vm
 	m := &Model{
 		Object: js.Global.Get("Object").New(),
 	}
@@ -90,7 +110,7 @@ func main() {
 	m.List = []int{1, 2, 3, 4}
 	m.Todos = []*Todo{}
 	m.AllItems = []string{"A", "B", "C", "D", "John", "Bill"}
-	m.CheckedItems = []string{}
+	m.CheckedItems = []string{"A", "B"}
 	m.Now = func() string {
 		println("now:", m.IntValue)
 		return time.Now().String() + fmt.Sprintf(" ==> i:%d", m.IntValue)

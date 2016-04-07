@@ -1,33 +1,29 @@
-package mapping
+package vue
 
 import (
 	"github.com/Archs/js/JSON"
 	"github.com/gopherjs/gopherjs/js"
-	"github.com/oskca/gopherjs-vue"
 	"strings"
 )
 
 // FromJS set the corresponding VueJS data model field from obj
-func FromJS(v *vue.Vue, obj *js.Object) *vue.Vue {
-	for _, key := range js.Keys(v.Object) {
-		// skip internal/unexported field
+// new data model field will be created when not exist
+func (v *ViewModel) FromJS(obj *js.Object) *ViewModel {
+	for _, key := range js.Keys(obj) {
+		// skip internal or unexported field
 		if strings.HasPrefix(key, "$") || strings.HasPrefix(key, "_") {
 			continue
 		}
-		val := obj.Get(key)
-		if val == js.Undefined {
-			continue
-		}
-		v.Set(key, val)
+		v.Set(key, obj.Get(key))
 	}
 	return v
 }
 
-func FromJSON(v *vue.Vue, jsonStr string) *vue.Vue {
-	return FromJS(v, JSON.Parse(jsonStr))
+func (v *ViewModel) FromJSON(jsonStr string) *ViewModel {
+	return v.FromJS(JSON.Parse(jsonStr))
 }
 
-func ToJS(v *vue.Vue) *js.Object {
+func (v *ViewModel) ToJS() *js.Object {
 	obj := js.Global.Get("Object").New()
 	for _, key := range js.Keys(v.Object) {
 		// skip internal/unexported field
@@ -39,6 +35,6 @@ func ToJS(v *vue.Vue) *js.Object {
 	return obj
 }
 
-func ToJSON(v *vue.Vue) string {
-	return JSON.Stringify(ToJSON(v))
+func (v *ViewModel) ToJSON() string {
+	return JSON.Stringify(v.ToJSON())
 }

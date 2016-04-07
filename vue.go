@@ -25,14 +25,17 @@ type Value struct {
 	Push func(any interface{}) (idx int) `js:"push"`
 	// Remove in the bottom of the array
 	Pop func() (idx int) `js:"pop"`
-	// Add in the front of the array
+	//Add in the front of the array
 	Unshift func(any interface{}) (idx int) `js:"unshift"`
-	// Remove in the front of the array
+	//Remove in the front of the array
 	Shift func() (idx int) `js:"shift"`
-	// array slice operation
-	Splice  func() *js.Object                                 `js:"splice"`
-	Sort    func(sorter func(a, b *js.Object) int) *js.Object `js:"sort"`
-	Reverse func() *js.Object                                 `js:"reverse"`
+	//array slice operation
+	// index	required,position to add to(remove from),negative means reverse
+	// howmany	required,number of items to remove, 0 means no remove
+	// items... optional,add new items to the array
+	Splice  func(index, howmany int, items ...interface{}) *js.Object `js:"splice"`
+	Sort    func(sorter func(a, b *js.Object) int) *js.Object         `js:"sort"`
+	Reverse func() *js.Object                                         `js:"reverse"`
 }
 
 // type Vue represents the JavaScript side VueJS instance or VueJS component
