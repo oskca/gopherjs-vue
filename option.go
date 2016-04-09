@@ -10,15 +10,15 @@ import (
 type LifeCycleEvent string
 
 const (
-	EvtInit          LifeCycleEvent = "init"
-	EvtCreated       LifeCycleEvent = "created"
-	EvtBeforeCompile LifeCycleEvent = "beforeCompile"
-	EvtCompiled      LifeCycleEvent = "compiled"
-	EvtReady         LifeCycleEvent = "ready"
-	EvtAttached      LifeCycleEvent = "attached"
-	EvtDetached      LifeCycleEvent = "detached"
-	EvtBeforeDestroy LifeCycleEvent = "beforeDestroy"
-	EvtDestroyed     LifeCycleEvent = "destroyed"
+	VmInit          LifeCycleEvent = "init"
+	VmCreated       LifeCycleEvent = "created"
+	VmBeforeCompile LifeCycleEvent = "beforeCompile"
+	VmCompiled      LifeCycleEvent = "compiled"
+	VmReady         LifeCycleEvent = "ready"
+	VmAttached      LifeCycleEvent = "attached"
+	VmDetached      LifeCycleEvent = "detached"
+	VmBeforeDestroy LifeCycleEvent = "beforeDestroy"
+	VmDestroyed     LifeCycleEvent = "destroyed"
 )
 
 // Option are used to organize mutiple sub component together to

@@ -42,8 +42,8 @@ func (m *Model) Inc() {
 func (m *Model) Repeat() {
 	m.Str = strings.Repeat(m.Str, 3)
 	vm := vue.GetVM(m)
-	println("Get(m):", vm)
-	println("m keys:", js.Keys(m.Object))
+	// println("Get(m):", vm)
+	// println("m keys:", js.Keys(m.Object))
 	// for i, key := range js.Keys(m.Object) {
 	// 	println(i, key)
 	// }
