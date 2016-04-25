@@ -12,8 +12,8 @@ var (
 )
 
 // type Value represents the VueJS wrapped observed Array or Object
-// the wrapped methods can be used trigger view update.
-// `*Value` is usually returned by calling `Vue.Get()`
+// the wrapped methods can be used to trigger view update.
+// `*Value` is usually returned by calling `ViewModel.Get()`
 type Value struct {
 	/////// Normal value operation as js.Object
 	*js.Object
