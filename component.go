@@ -72,7 +72,7 @@ func NewComponent(
 	opt.Data = vmfn
 	opt.Template = templateStr
 	opt.Replace = replace
-	opt.OnLifeCycleEvent(VmInit, func(vm *ViewModel) {
+	opt.OnLifeCycleEvent(EvtBeforeCreate, func(vm *ViewModel) {
 		vm.Options.Set("methods", js.MakeWrapper(vmfn()))
 		vMap[vmfn()] = vm
 	})
