@@ -11,31 +11,42 @@ var (
 	vMap = make(map[interface{}]*ViewModel, 0)
 )
 
-// type Value represents the VueJS wrapped observed Array or Object
-// the wrapped methods can be used to trigger view update.
-// `*Value` is usually returned by calling `ViewModel.Get()`
-type Value struct {
-	/////// Normal value operation as js.Object
-	*js.Object
+// Add in the bottom of the array
+func Push(obj *js.Object, any interface{}) (idx int) {
+	return obj.Call("push", any).Int()
+}
 
-	/////// VueJS wrapped Array Operations
-	/////// in fact normal gopherjs slice ops would effect
-	/////// the save way
-	// Add in the bottom of the array
-	Push func(any interface{}) (idx int) `js:"push"`
-	// Remove in the bottom of the array
-	Pop func() (idx int) `js:"pop"`
-	//Add in the front of the array
-	Unshift func(any interface{}) (idx int) `js:"unshift"`
-	//Remove in the front of the array
-	Shift func() (idx int) `js:"shift"`
-	//array slice operation
-	// index	required,position to add to(remove from),negative means reverse
-	// howmany	required,number of items to remove, 0 means no remove
-	// items... optional,add new items to the array
-	Splice  func(index, howmany int, items ...interface{}) *js.Object `js:"splice"`
-	Sort    func(sorter func(a, b *js.Object) int) *js.Object         `js:"sort"`
-	Reverse func() *js.Object                                         `js:"reverse"`
+// Remove in the bottom of the array
+func Pop(obj *js.Object) (idx int) {
+	return obj.Call("pop").Int()
+}
+
+//Add in the front of the array
+func Unshift(obj *js.Object, any interface{}) (idx int) {
+	return obj.Call("unshift", any).Int()
+}
+
+//Remove in the front of the array
+func Shift(obj *js.Object) (idx int) {
+	return obj.Call("shift").Int()
+}
+
+//array slice operation
+// index	required,position to add to(remove from),negative means reverse
+// howmany	required,number of items to remove, 0 means no remove
+// items... optional,add new items to the array
+func Splice(obj *js.Object, index, howmany int, items ...interface{}) *js.Object {
+	args := []interface{}{index, howmany}
+	args = append(args, items...)
+	return obj.Call("splice", args...)
+}
+
+func Sort(obj *js.Object, sorter func(a, b *js.Object) int) *js.Object {
+	return obj.Call("sort", sorter)
+}
+
+func Reverse(obj *js.Object) *js.Object {
+	return obj.Call("reverse")
 }
 
 // type Vue represents the JavaScript side VueJS instance or VueJS component
@@ -134,13 +145,6 @@ type ViewModel struct {
 	// assuming vm.msg = 'hello'
 	// vm.$eval('msg | uppercase') // -> 'HELLO'
 	Eval func(expression string) *js.Object `js:"$eval"`
-
-	// vm.$get( expression )
-	// 	expression String
-	// Retrieve a value from the Vue instance given an expression.
-	// Expressions that throw errors will be suppressed
-	// and return undefined.
-	Get func(expression string) *Value `js:"$get"`
 
 	// vm.$set( keypath, value )
 	// 	keypath String

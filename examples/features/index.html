@@ -20,11 +20,11 @@
         <template v-for="item in AllItems">
             <label style="display: inline;">
                 {{item}}
-                <input type="checkbox" id="{{item}}" value="{{item}}" v-model="CheckedItems" />
+                <input type="checkbox" :id="item" :value="item" v-model="CheckedItems" />
             </label>
         </template>
         <div>
-            <span>CheckedItems: {{ CheckedItems | json }}</span>
+            <span>CheckedItems: {{ CheckedItems }}</span>
         </div>
         <input v-model="integer">
         <button @click="Inc">Inc</button>
@@ -36,12 +36,14 @@
             {{ item }}
         </li>
         <input v-model="str" />
+        <br>
+        Todos:<br>
         <ul v-for="todo in todos">
-            <li>{{todo.Time | timeFormat}} - {{todo.Content}}</li>
+            <li>{{todo.time }} - {{todo.content}}</li>
         </ul>
         <p>{{str}}</p>
     </div>
     <script type="text/javascript" src="features.js"></script>
-</body>
+</bodyk
 
 </html>
