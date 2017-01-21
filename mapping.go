@@ -1,9 +1,10 @@
 package vue
 
 import (
-	"github.com/Archs/js/JSON"
-	"github.com/gopherjs/gopherjs/js"
 	"strings"
+
+	"github.com/gopherjs/gopherjs/js"
+	"github.com/oskca/gopherjs-json"
 )
 
 // FromJS set the corresponding VueJS data model field from obj
@@ -14,13 +15,13 @@ func (v *ViewModel) FromJS(obj *js.Object) *ViewModel {
 		if strings.HasPrefix(key, "$") || strings.HasPrefix(key, "_") {
 			continue
 		}
-		v.Set(key, obj.Get(key))
+		v.Object.Set(key, obj.Get(key))
 	}
 	return v
 }
 
 func (v *ViewModel) FromJSON(jsonStr string) *ViewModel {
-	return v.FromJS(JSON.Parse(jsonStr))
+	return v.FromJS(json.Parse(jsonStr))
 }
 
 func (v *ViewModel) ToJS() *js.Object {
@@ -36,5 +37,5 @@ func (v *ViewModel) ToJS() *js.Object {
 }
 
 func (v *ViewModel) ToJSON() string {
-	return JSON.Stringify(v.ToJSON())
+	return json.Stringify(v.ToJSON())
 }
