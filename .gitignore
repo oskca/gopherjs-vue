@@ -28,3 +28,5 @@ examples/unwritableTime/unwritableTime.js
 examples/unwritableTime/unwritableTime.js.map
 examples/component/component.js
 examples/component/component.js.map
+
+node_modules/
