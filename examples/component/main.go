@@ -31,7 +31,7 @@ type controller struct {
 
 func main() {
 	vue.NewComponent(New, template).Register("my-el")
-	vm := vue.New("body", new(controller))
+	vm := vue.New("#app", new(controller))
 	js.Global.Set("vm", vm)
 	println("vm:", vm)
 }

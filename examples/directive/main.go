@@ -1,9 +1,10 @@
 package main
 
 import (
+	"time"
+
 	"github.com/gopherjs/gopherjs/js"
 	"github.com/oskca/gopherjs-vue"
-	"time"
 )
 
 type Model struct {
@@ -14,7 +15,7 @@ type Model struct {
 
 func main() {
 	d := vue.NewDirective()
-	d.SetUpdater(func(ctx *vue.DirectiveContext, val *js.Object) {
+	d.SetUpdater(func(el *js.Object, ctx *vue.DirectiveBinding, val *js.Object) {
 		println("directive name:", ctx.Name)
 		println("directive exp:", ctx.Expression)
 		println("directive values:", val)
@@ -25,5 +26,5 @@ func main() {
 	}
 	m.Text = "a string"
 	m.Time = time.Now().String()
-	vue.New("body", m)
+	vue.New("#app", m)
 }

@@ -6,16 +6,18 @@
 </head>
 
 <body>
-    <div>Text:{{Text}}</div>
-    <div>
-        <input v-model="Text"></input>
+    <div id="app">
+        <div>Text:{{Text}}</div>
+        <div>
+            <input v-model="Text"></input>
+        </div>
+        <div v-myd="Text"></div>
+        <div>Time:{{Time}}</div>
+        <div>
+            <input v-model="Time"></input>
+        </div>
+        <div v-myd="Time"></div>
     </div>
-    <div v-myd="Text"></div>
-    <div>Time:{{Time}}</div>
-    <div>
-        <input v-model="Time"></input>
-    </div>
-    <div v-myd="Time"></div>
     <script type="text/javascript" src="directive.js"></script>
 </body>
 
