@@ -125,6 +125,27 @@ type Option struct {
 	// into the parent’s $children array.
 	Parent *js.Object `js:"parent"`
 
+	// delimiters
+	//
+	// Type: Array<string>
+	//
+	// default: ["{{", "}}"]
+	//
+	// Details:
+	//
+	// Change the plain text interpolation delimiters.
+	// This option is only available in the standalone build.
+	Delimiters []string `js:"delimiters"`
+
+	// functional
+	// Type: boolean
+	// Details:
+	// 	Causes a component to be stateless (no data) and
+	// 	instanceless (no this context).
+	// 	They are simply a render function that returns virtual nodes
+	// 	making them much cheaper to render.
+	Functional []string `js:"functional"`
+
 	// map to sub component
 	coms map[string]*Component
 	// properties
