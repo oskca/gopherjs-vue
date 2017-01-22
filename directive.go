@@ -61,28 +61,28 @@ type Directive struct {
 	// Priority int `js:"priority"`
 }
 
-func NewDirective(updater ...func(el *js.Object, b *DirectiveBinding, val *js.Object)) *Directive {
+func NewDirective(updaterCallBack ...interface{}) *Directive {
 	d := &Directive{
 		Object: js.Global.Get("Object").New(),
 	}
-	if len(updater) > 0 {
-		d.SetUpdater(updater[0])
+	if len(updaterCallBack) > 0 {
+		d.SetUpdater(updaterCallBack[0])
 	}
 	return d
 }
 
-func (d *Directive) SetBinder(fn func(b *DirectiveBinding)) *Directive {
-	d.Set("bind", fn)
+func (d *Directive) SetBinder(fnCallback interface{}) *Directive {
+	d.Set("bind", fnCallback)
 	return d
 }
 
-func (d *Directive) SetUnBinder(fn func(b *DirectiveBinding)) *Directive {
-	d.Set("unbind", fn)
+func (d *Directive) SetUnBinder(fnCallback interface{}) *Directive {
+	d.Set("unbind", fnCallback)
 	return d
 }
 
-func (d *Directive) SetUpdater(fn func(el *js.Object, b *DirectiveBinding, val *js.Object)) *Directive {
-	d.Set("update", fn)
+func (d *Directive) SetUpdater(fnCallback interface{}) *Directive {
+	d.Set("update", fnCallback)
 	return d
 }
 
@@ -109,12 +109,12 @@ type ElementDirective struct {
 	*Directive
 }
 
-func NewElementDirective(updater ...func(el *js.Object, b *DirectiveBinding, val *js.Object)) *ElementDirective {
+func NewElementDirective(updaterCallBack ...interface{}) *ElementDirective {
 	d := &ElementDirective{
-		Directive: NewDirective(updater...),
+		Directive: NewDirective(updaterCallBack...),
 	}
-	if len(updater) > 0 {
-		d.SetUpdater(updater[0])
+	if len(updaterCallBack) > 0 {
+		d.SetUpdater(updaterCallBack[0])
 	}
 	return d
 }
