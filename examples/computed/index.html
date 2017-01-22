@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div id="app" v-cloak>
+        <div>integer: {{ integer }}
+            <input v-model="integer"></input>
+        </div>
+        <div>double: {{ double }} </div>
+        <div>str: {{ str }} </div>
+        <button v-on:click="Inc">Increase</button>
+        <button v-on:click="Repeat">Repeat</button>
+        <button v-on:click="Reset">Reset</button>
+    </div>
+    <script type="text/javascript" src="computed.js"></script>
+</body>
+
+</html>
