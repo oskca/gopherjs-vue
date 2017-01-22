@@ -277,7 +277,7 @@ type ViewModel struct {
 	// on an already mounted instance will have no effect.
 	// The method returns the instance itself so you can chain other
 	// instance methods after it.
-	Mount func(elementOrselector string) *ViewModel `js:"$mount"`
+	Mount func(elementOrselector ...interface{}) *js.Object `js:"$mount"`
 
 	// vm.$destroy( [remove] )
 	//  remove Boolean optional
@@ -286,16 +286,6 @@ type ViewModel struct {
 	// unbind all its directives and remove its $el from the DOM.
 	// Also, all $on and $watch listeners will be automatically removed.
 	Destroy func(remove bool) `js:"$destroy"`
-
-	// vm.$compile( element )
-	// 	element HTMLElement
-	// Partially compile a piece of DOM (Element or DocumentFragment).
-	// The method returns a decompile function that tearsdown the directives
-	// created during the process.
-	// Note the decompile function does not remove the DOM.
-	// This method is exposed primarily for
-	// writing advanced custom directives.
-	Compile func(element string) `js:"$compile"`
 
 	// vm.$addChild( [options, constructor] )
 	//  options Object optional
@@ -391,7 +381,7 @@ func GetVM(structPtr interface{}) *ViewModel {
 	return vm
 }
 
-// WatchEx using a simpler form to do Vue.$watch
+// Watch using a simpler form to do Vue.$watch
 func (v *ViewModel) Watch(expression string, callback func(newVal *js.Object)) (unwatcher func()) {
 	obj := v.Call("$watch", expression, callback)
 	return func() {

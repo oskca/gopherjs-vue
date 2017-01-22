@@ -63,15 +63,10 @@ func NewComponent(
 		p.counter += 1
 		return p.structPtr
 	}
-	replace := true
-	if len(replaceMountPoint) > 0 {
-		replace = replaceMountPoint[0]
-	}
 	// opts
 	opt := NewOption()
 	opt.Data = vmfn
 	opt.Template = templateStr
-	opt.Replace = replace
 	opt.OnLifeCycleEvent(EvtBeforeCreate, func(vm *ViewModel) {
 		vm.Options.Set("methods", js.MakeWrapper(vmfn()))
 		vMap[vmfn()] = vm
