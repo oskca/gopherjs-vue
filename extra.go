@@ -1,5 +1,26 @@
 package vue
 
+import (
+	"github.com/gopherjs/gopherjs/js"
+)
+
+// TConfig is used for declaration only
+type TConfig struct {
+	*js.Object
+	// Suppress all Vue logs and warnings.
+	Silent bool `js:"silent"`
+	// The merge strategy receives the value of that option defined on the parent and child instances as the first and second arguments, respectively.
+	OptionMergeStrategies interface{} `js:"optionMergeStrategies"`
+	// Configure whether to allow vue-devtools inspection.
+	Devtools bool `js:"devtools"`
+	// Assign a handler for uncaught errors during component render and watchers.
+	ErrorHandler func(err, vm *js.Object) `js:"errorHandler"`
+	// Make Vue ignore custom elements defined outside of Vue (e.g., using the Web Components APIs).
+	IgnoredElements []string `js:"ignoredElements"`
+	// Define custom key alias(es) for v-on.
+	KeyCodes map[string]int `js:"keyCodes"`
+}
+
 // Vue.partial( id, [definition] )
 // id String
 // definition String | Node optional
@@ -48,4 +69,10 @@ func Set(obj, key, value interface{}) {
 // Vue cannot detect property deletions, but you should rarely need to use it.
 func Delete(obj, key interface{}) {
 	vue.Call("delete", obj, key)
+}
+
+var Config = &TConfig{}
+
+func init() {
+	Config.Object = vue.Get("config")
 }
