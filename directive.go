@@ -89,36 +89,3 @@ func (d *Directive) SetUpdater(fnCallback interface{}) *Directive {
 func (d *Directive) Register(name string) {
 	js.Global.Get("Vue").Call("directive", name, d.Object)
 }
-
-// In some cases, we may want our directive to be used in the form of
-// a custom element rather than as an attribute.
-// This is very similar to Angular’s notion of “E” mode directives.
-// Element directives provide a lighter-weight alternative to
-// full-blown components (which are explained later in the guide).
-//
-// Element directives cannot accept arguments or
-// expressions, but it can read the element’s attributes to
-// determine its behavior.
-//
-// A big difference from normal directives is that
-// element directives are terminal, which means once Vue encounters
-// an element directive, it will completely skip that element
-// - only the element directive itself will be
-// able to manipulate that element and its children.
-type ElementDirective struct {
-	*Directive
-}
-
-func NewElementDirective(updaterCallBack ...interface{}) *ElementDirective {
-	d := &ElementDirective{
-		Directive: NewDirective(updaterCallBack...),
-	}
-	if len(updaterCallBack) > 0 {
-		d.SetUpdater(updaterCallBack[0])
-	}
-	return d
-}
-
-func (d *ElementDirective) Register(name string) {
-	js.Global.Get("Vue").Call("elementDirective", name, d.Object)
-}
