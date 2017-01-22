@@ -113,19 +113,6 @@ type Option struct {
 	// use of the common <script type="x-template"> trick to include templates.
 	Template string `js:"template"`
 
-	// 	Type: Boolean
-	//
-	// Default: true
-	//
-	// Restriction: only respected if the template option is also present.
-	//
-	// Details:
-	//
-	// Determines whether to replace the element being mounted on with the
-	// template. If set to false, the template will overwrite the element’s inner
-	// content without replacing the element itself.
-	Replace bool `js:"replace"`
-
 	// parent
 	//
 	// Type: Vue instance
@@ -186,6 +173,9 @@ func (c *Option) prepare() (opts *js.Object) {
 // SetDataWithMethods set data and methods of the genereated VueJS instance
 // based on `structPtr` and `js.MakeWrapper(structPtr)`
 func (c *Option) SetDataWithMethods(structPtr interface{}) *Option {
+	if structPtr == nil {
+		return c
+	}
 	c.Set("data", structPtr)
 	c.Set("methods", js.MakeWrapper(structPtr))
 	return c
@@ -201,6 +191,43 @@ func (o *Option) AddMethod(name string, fn func(vm *ViewModel, args []*js.Object
 			return nil
 		}),
 	})
+}
+
+type CreateElement func(tagName string, data interface{}, children []interface{}) (vnode *js.Object)
+type Render func(vm *ViewModel, fn CreateElement)
+
+func (o *Option) SetRender(r Render) {
+	fn := js.MakeFunc(func(this *js.Object, arguments []*js.Object) interface{} {
+		vm := newViewModel(this)
+		jsCreateElement := arguments[0]
+		createElement := func(tagName string, data interface{}, children []interface{}) (vnode *js.Object) {
+			return jsCreateElement.Call(tagName, data, children)
+		}
+		r(vm, createElement)
+		return nil
+	})
+	o.Object.Set("render", fn)
+}
+
+// AddComputed set computed data
+func (o *Option) AddComputed(name string, getter func(vm *ViewModel) interface{}, setter ...func(vm *ViewModel, val *js.Object)) {
+	conf := make(map[string]js.M)
+	conf[name] = make(js.M)
+	fnGetter := js.MakeFunc(func(this *js.Object, arguments []*js.Object) interface{} {
+		vm := newViewModel(this)
+		return getter(vm)
+	})
+	conf[name]["get"] = fnGetter
+	if len(setter) > 0 {
+		fnSetter := js.MakeFunc(func(this *js.Object, arguments []*js.Object) interface{} {
+			vm := newViewModel(this)
+			setter[0](vm, arguments[0])
+			return nil
+		})
+		conf[name]["set"] = fnSetter
+	}
+	// using mixin here
+	o.addMixin("computed", conf)
 }
 
 func (o *Option) OnLifeCycleEvent(evt LifeCycleEvent, fn func(vm *ViewModel)) *Option {
