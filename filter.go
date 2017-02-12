@@ -4,21 +4,14 @@ import (
 	"github.com/gopherjs/gopherjs/js"
 )
 
-type Filter struct {
-	*js.Object
-	Read  interface{} `js:"read"`
-	Write interface{} `js:"write"`
-}
+// Filter return interface{} to utilize GopherJS type convertion automatically
+type Filter func(oldValue *js.Object) (newValue interface{})
 
 // using interface{} type here to utilize GopherJS type convertion automatically
-func NewFilter(readerfn interface{}) *Filter {
-	f := &Filter{
-		Object: js.Global.Get("Object").New(),
-	}
-	f.Read = readerfn
-	return f
+func NewFilter(fn func(oldValue *js.Object) (newValue interface{})) Filter {
+	return Filter(fn)
 }
 
-func (f *Filter) Register(name string) {
-	vue.Call("filter", name, f.Object)
+func (f Filter) Register(name string) {
+	vue.Call("filter", name, f)
 }
