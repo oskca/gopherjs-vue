@@ -60,14 +60,14 @@ func (m *Model) Repeat() {
 
 func (m *Model) PopulateTodo() {
 	// using append would cause GopherJS internalization problems
+	// but this way works with Todo has js.Object embeded
+	m.Todos = append(m.Todos, NewTodo(m.Str))
+}
+
+func (m *Model) PopulateTodo2() {
 	// so it's better to use VueJS ops to manipulates the array
-	// m.Todos = append(m.Todos, NewTodo(m.Str))
 	vm := vue.GetVM(m)
 	todos := vm.Get("todos")
-	// println("ok 0", todos, todos.Get("length"))
-	// println("ok 1", todos, todos.Length())
-	// println("ok 2", m.Todos, len(m.Todos))
-	// vue.Unshift(todos, NewTodo(m.Str))
 	vue.Push(todos, NewTodo(m.Str))
 }
 
