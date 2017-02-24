@@ -19,7 +19,7 @@ type Todo struct {
 
 func NewTodo(content string) *Todo {
 	t := &Todo{
-		Object: js.Global.Get("Object"),
+		Object: js.Global.Get("Object").New(),
 	}
 	t.Time = time.Now().String()
 	t.Content = content
@@ -61,14 +61,14 @@ func (m *Model) Repeat() {
 func (m *Model) PopulateTodo() {
 	// using append would cause GopherJS internalization problems
 	// so it's better to use VueJS ops to manipulates the array
-	m.Todos = append(m.Todos, NewTodo(m.Str))
-	// vm := vue.GetVM(m)
-	// todos := vm.Get("todos")
+	// m.Todos = append(m.Todos, NewTodo(m.Str))
+	vm := vue.GetVM(m)
+	todos := vm.Get("todos")
 	// println("ok 0", todos, todos.Get("length"))
 	// println("ok 1", todos, todos.Length())
 	// println("ok 2", m.Todos, len(m.Todos))
 	// vue.Unshift(todos, NewTodo(m.Str))
-	// vue.Push(todos, NewTodo(m.Str))
+	vue.Push(todos, NewTodo(m.Str))
 }
 
 func (m *Model) MapTodos() {
@@ -104,7 +104,8 @@ func (m *Model) DoubleInt() int {
 
 func main() {
 	// register a time formating filter
-	vue.NewFilter(func(t time.Time) string {
+	vue.NewFilter(func(v *js.Object) interface{} {
+		t, _ := time.Parse("2006-01-02 15:04:05.999999999 -0700 MST", v.String())
 		return t.Format("2006-01-02 15:04:05")
 	}).Register("timeFormat")
 	// begin vm
