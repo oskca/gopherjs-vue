@@ -22,6 +22,13 @@ These are the basic rules to use this package:
   should have an anonymous embeded `*js.Object` field and the `exported fields`
   should have proper `js struct tag` for bidirectionaly data bindings
 
+# Using the debug|dev version of VueJS
+
+This package includes the `minified|product version` of VueJS code by default, 
+if you want to include the `debug|dev version` of of VueJS code, please specify
+buidling tags `debug` to the `gopherjs build` cmd as this:
+
+    gopherjs build --tags debug main.go
 
 for more details please see the examples.
 
